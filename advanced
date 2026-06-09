@@ -2,6 +2,7 @@ TDS:Loadout("Assassin", "None", "None", "None", "None")
 TDS:Mode("Easy")
 TDS:GameInfo("Simplicity", {})
 TDS:Ready()
+TDS:VoteSkip(1,19)
 for i = 1, 15 do
     TDS:Place("Assassin", -18.472938537597656, 0.999989926815033, -12.251140594482422, true)
 end
