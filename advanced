@@ -1,3 +1,20 @@
+local TeleportService = game:GetService("TeleportService")
+local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+task.spawn(function()
+    local UiRoot
+
+    repeat
+        task.wait(1)
+
+        local root = PlayerGui:FindFirstChild("ReactGameNewRewards")
+        local frame = root and root:FindFirstChild("Frame")
+        local gameOver = frame and frame:FindFirstChild("gameOver")
+        local RewardsScreen = gameOver and gameOver:FindFirstChild("RewardsScreen")
+        UiRoot = RewardsScreen and RewardsScreen:FindFirstChild("RewardsSection")
+    until UiRoot
+    TeleportService:Teleport(3260590327)
+end)
 TDS:Loadout("Assassin", "None", "None", "None", "None")
 TDS:Mode("Easy")
 TDS:GameInfo("Simplicity", {})
