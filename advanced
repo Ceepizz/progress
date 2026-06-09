@@ -1,34 +1,14 @@
 TDS:Loadout("Assassin", "None", "None", "None", "None")
 TDS:Mode("Easy")
-
-local prol = {
-    Glass = true,
-    Quarantine = true,
-    Committed = true
-}
-
-game:GetService("ReplicatedStorage").Network.Modifiers["RF:BulkVoteModifiers"]:InvokeServer(prol)
-
-TDS:UnlockTimeScale()
-TDS:TimeScale(2)
-
-wait(3)
 TDS:GameInfo("Simplicity", {})
-wait(5)
 TDS:Ready()
-
--- Place 15 Assassins
 for i = 1, 15 do
     TDS:Place("Assassin", -18.472938537597656, 0.999989926815033, -12.251140594482422, true)
 end
-
--- Upgrade Assassins 1-4
 for i = 1, 4 do TDS:Upgrade(1) end
 for i = 1, 4 do TDS:Upgrade(2) end
 for i = 1, 4 do TDS:Upgrade(3) end
 for i = 1, 2 do TDS:Upgrade(4) end
-
--- Upgrade Assassins 5-15
 for i = 1, 2 do TDS:Upgrade(5) end
 for i = 1, 2 do TDS:Upgrade(6) end
 for i = 1, 2 do TDS:Upgrade(7) end
@@ -39,11 +19,9 @@ for i = 1, 2 do TDS:Upgrade(11) end
 for i = 1, 2 do TDS:Upgrade(12) end
 for i = 1, 2 do TDS:Upgrade(13) end
 for i = 1, 2 do TDS:Upgrade(14) end
-
 for i = 1, 21 do
     TDS:Place("Assassin", -18.03131675720215, 0.9999834895133972, -4.665659427642822, true)
 end
-
 for i = 1, 4 do TDS:Upgrade(16) end
 for i = 1, 4 do TDS:Upgrade(17) end
 for i = 1, 4 do TDS:Upgrade(18) end
