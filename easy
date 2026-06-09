@@ -1,0 +1,64 @@
+TDS:Loadout("Scout", "None", "None", "None", "None")
+TDS:Mode("Easy")
+TDS:GameInfo("Simplicity", {})
+TDS:Ready()
+TDS:VoteSkip(1,19)
+for i = 1, 1 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+TDS:Upgrade(1)
+TDS:Upgrade(1)
+for i = 1, 9 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+TDS:Upgrade(2)
+TDS:Upgrade(2)
+TDS:Upgrade(3)
+TDS:Upgrade(3)
+TDS:Upgrade(4)
+TDS:Upgrade(4)
+TDS:Upgrade(5)
+TDS:Upgrade(6)
+TDS:Upgrade(6)
+TDS:Upgrade(7)
+TDS:Upgrade(7)
+TDS:Upgrade(8)
+TDS:Upgrade(9)
+TDS:Upgrade(9)
+TDS:Upgrade(10)
+TDS:Upgrade(10)
+TDS:Upgrade(1)
+TDS:Upgrade(1)
+TDS:Upgrade(2)
+TDS:Upgrade(2)
+TDS:Upgrade(3)
+TDS:Upgrade(3)
+TDS:Upgrade(4)
+TDS:Upgrade(4)
+TDS:Upgrade(5)
+TDS:Upgrade(6)
+TDS:Upgrade(6)
+TDS:Upgrade(7)
+TDS:Upgrade(7)
+TDS:Upgrade(8)
+TDS:Upgrade(9)
+TDS:Upgrade(9)
+TDS:Upgrade(10)
+TDS:Upgrade(10)
+for i = 1, 20 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+for i = 1, 4 do TDS:Upgrade(11) end
+for i = 1, 4 do TDS:Upgrade(12) end
+for i = 1, 4 do TDS:Upgrade(13) end
+for i = 1, 4 do TDS:Upgrade(14) end
+for i = 1, 4 do TDS:Upgrade(15) end
+for i = 1, 4 do TDS:Upgrade(16) end
+for i = 1, 4 do TDS:Upgrade(17) end
+for i = 1, 4 do TDS:Upgrade(18) end
+for i = 1, 4 do TDS:Upgrade(19) end
+for i = 1, 4 do TDS:Upgrade(20) end
+for i = 1, 4 do TDS:Upgrade(21) end
+for i = 1, 4 do TDS:Upgrade(22) end
+for i = 1, 4 do TDS:Upgrade(23) end
+for i = 1, 4 do TDS:Upgrade(24) end
+for i = 1, 4 do TDS:Upgrade(25) end
+for i = 1, 4 do TDS:Upgrade(26) end
+for i = 1, 4 do TDS:Upgrade(27) end
+for i = 1, 4 do TDS:Upgrade(28) end
+for i = 1, 4 do TDS:Upgrade(29) end
+for i = 1, 4 do TDS:Upgrade(30) end
