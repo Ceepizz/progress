@@ -155,14 +155,13 @@ local function BuyTower(towerName)
     print("buying " .. towerName)
     rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
 end
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Library.lua"))()
+
 
 local function RunEasy()
 if runningEasy then return end
     runningEasy = true
     print("starting easy strat")
-	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Library.lua"))()
-TDS:Addons()
-
 TDS:Loadout("Scout", "None", "None", "None", "None")
 TDS:Mode("Easy")
 TDS:GameInfo("Simplicity", {})
