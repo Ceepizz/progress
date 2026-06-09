@@ -1,0 +1,388 @@
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+
+local SETTINGS_FILE = "AutoProgression.json"
+
+local Settings = {
+    AutoProgression = false
+}
+
+if isfile and isfile(SETTINGS_FILE) then
+    local success, data = pcall(function()
+        return HttpService:JSONDecode(readfile(SETTINGS_FILE))
+    end)
+
+    if success then
+        Settings = data
+    end
+end
+
+local function SaveSettings()
+    if writefile then
+        writefile(
+            SETTINGS_FILE,
+            HttpService:JSONEncode(Settings)
+        )
+    end
+end
+
+local plr = Players.LocalPlayer
+local playerGui = plr:WaitForChild("PlayerGui")
+local rf = ReplicatedStorage:WaitForChild("RemoteFunction")
+local cache = require(ReplicatedStorage.Client.Modules.Cache)("Inventory.Troops")
+
+local oldGui = playerGui:FindFirstChild("Tracker")
+if oldGui then
+    oldGui:Destroy()
+end
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "Tracker"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 260, 0, 180)
+frame.Position = UDim2.new(0, 20, 0, 120)
+frame.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(60, 60, 80)
+stroke.Thickness = 2
+stroke.Parent = frame
+
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, -24, 0, 38)
+header.Position = UDim2.new(0, 12, 0, 12)
+header.BackgroundColor3 = Color3.fromRGB(70, 130, 255)
+header.BorderSizePixel = 0
+header.Parent = frame
+
+Instance.new("UICorner", header).CornerRadius = UDim.new(0, 12)
+
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 150, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(170, 80, 220))
+})
+gradient.Parent = header
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 1, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Auto Progression OFF"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.TextWrapped = false
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.Parent = header
+
+local titleConstraint = Instance.new("UITextSizeConstraint")
+titleConstraint.MaxTextSize = 22
+titleConstraint.MinTextSize = 15
+titleConstraint.Parent = title
+
+local coinsText = Instance.new("TextLabel")
+coinsText.Size = UDim2.new(1, -24, 0, 28)
+coinsText.Position = UDim2.new(0, 18, 0, 62)
+coinsText.BackgroundTransparency = 1
+coinsText.TextColor3 = Color3.fromRGB(255, 221, 0)
+coinsText.TextScaled = true
+coinsText.Font = Enum.Font.GothamBold
+coinsText.TextXAlignment = Enum.TextXAlignment.Left
+coinsText.Parent = frame
+
+local levelText = Instance.new("TextLabel")
+levelText.Size = UDim2.new(1, -24, 0, 28)
+levelText.Position = UDim2.new(0, 18, 0, 92)
+levelText.BackgroundTransparency = 1
+levelText.TextColor3 = Color3.fromRGB(85, 170, 255)
+levelText.TextScaled = true
+levelText.Font = Enum.Font.GothamBold
+levelText.TextXAlignment = Enum.TextXAlignment.Left
+levelText.Parent = frame
+
+local toggle = Instance.new("TextButton")
+toggle.Size = UDim2.new(0, 90, 0, 30)
+toggle.Position = UDim2.new(0.5, -45, 1, -40)
+toggle.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+toggle.Text = "OFF"
+toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggle.TextScaled = true
+toggle.Font = Enum.Font.GothamBold
+toggle.Parent = frame
+
+Instance.new("UICorner", toggle).CornerRadius = UDim.new(0, 10)
+
+local AutoProgression = Settings.AutoProgression
+local running = false
+
+local function GetStat(name)
+    local obj = plr:FindFirstChild(name)
+
+    if obj and obj.Value ~= nil then
+        return obj.Value
+    end
+
+    local attr = plr:GetAttribute(name)
+    if attr ~= nil then
+        return attr
+    end
+
+    local leaderstats = plr:FindFirstChild("leaderstats")
+    local stat = leaderstats and leaderstats:FindFirstChild(name)
+
+    if stat and stat.Value ~= nil then
+        return stat.Value
+    end
+
+    return 0
+end
+local function HasTower(towerName)
+    local data = cache:GetValue()
+    return data and data[towerName] ~= nil
+end
+
+local function BuyTower(towerName)
+    print("buying " .. towerName)
+    rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
+end
+
+local function RunEasy()
+if runningEasy then return end
+    runningEasy = true
+    print("starting easy strat")
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Library.lua"))()
+TDS:Addons()
+
+TDS:Loadout("Scout", "None", "None", "None", "None")
+TDS:Mode("Easy")
+TDS:GameInfo("Simplicity", {})
+
+wait(2)
+TDS:Ready()
+
+for i = 1, 1 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+TDS:Upgrade(1)
+TDS:Upgrade(1)
+for i = 1, 9 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+TDS:Upgrade(2)
+TDS:Upgrade(2)
+TDS:Upgrade(3)
+TDS:Upgrade(3)
+TDS:Upgrade(4)
+TDS:Upgrade(4)
+TDS:Upgrade(5)
+TDS:Upgrade(6)
+TDS:Upgrade(6)
+TDS:Upgrade(7)
+TDS:Upgrade(7)
+TDS:Upgrade(8)
+TDS:Upgrade(9)
+TDS:Upgrade(9)
+TDS:Upgrade(10)
+TDS:Upgrade(10)
+TDS:Upgrade(1)
+TDS:Upgrade(1)
+TDS:Upgrade(2)
+TDS:Upgrade(2)
+TDS:Upgrade(3)
+TDS:Upgrade(3)
+TDS:Upgrade(4)
+TDS:Upgrade(4)
+TDS:Upgrade(5)
+TDS:Upgrade(6)
+TDS:Upgrade(6)
+TDS:Upgrade(7)
+TDS:Upgrade(7)
+TDS:Upgrade(8)
+TDS:Upgrade(9)
+TDS:Upgrade(9)
+TDS:Upgrade(10)
+TDS:Upgrade(10)
+for i = 1, 20 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
+for i = 1, 4 do TDS:Upgrade(11) end
+for i = 1, 4 do TDS:Upgrade(12) end
+for i = 1, 4 do TDS:Upgrade(13) end
+for i = 1, 4 do TDS:Upgrade(14) end
+for i = 1, 4 do TDS:Upgrade(15) end
+for i = 1, 4 do TDS:Upgrade(16) end
+for i = 1, 4 do TDS:Upgrade(17) end
+for i = 1, 4 do TDS:Upgrade(18) end
+for i = 1, 4 do TDS:Upgrade(19) end
+for i = 1, 4 do TDS:Upgrade(20) end
+for i = 1, 4 do TDS:Upgrade(21) end
+for i = 1, 4 do TDS:Upgrade(22) end
+for i = 1, 4 do TDS:Upgrade(23) end
+for i = 1, 4 do TDS:Upgrade(24) end
+for i = 1, 4 do TDS:Upgrade(25) end
+for i = 1, 4 do TDS:Upgrade(26) end
+for i = 1, 4 do TDS:Upgrade(27) end
+for i = 1, 4 do TDS:Upgrade(28) end
+for i = 1, 4 do TDS:Upgrade(29) end
+for i = 1, 4 do TDS:Upgrade(30) end
+end
+
+local function RunAdvanced()
+    print("starting advanced strat")
+end
+
+local function RunPizza()
+    print("starting pizza strat")
+end
+
+local function RunHardcore()
+    print("starting hardcore mode")
+end
+
+local function RunAutoProgression()
+    if running then return end
+    running = true
+
+    print("Auto progression started")
+
+    local level = GetStat("Level")
+    local coins = GetStat("Coins")
+
+    if level >= 50 then
+        local hasPyro = HasTower("Pyromancer")
+        local hasHunter = HasTower("Hunter")
+
+        if hasPyro and hasHunter then
+            RunHardcore()
+        else
+            if coins >= 2250 then
+                if not hasPyro then
+                    BuyTower("Pyromancer")
+                    task.wait(1)
+                end
+
+                if not hasHunter then
+                    BuyTower("Hunter")
+                    task.wait(1)
+                end
+
+                if HasTower("Pyromancer") and HasTower("Hunter") then
+                    print("Pyromancer and Hunter bought")
+                    RunHardcore()
+                else
+                    RunPizza()
+                end
+            else
+                RunPizza()
+            end
+        end
+
+    elseif level <= 24 then
+        if HasTower("Assassin") then
+            RunAdvanced()
+        else
+            if coins >= 800 then
+                BuyTower("Assassin")
+                task.wait(1)
+
+                if HasTower("Assassin") then
+                    print("Assassin bought")
+                    RunAdvanced()
+                else
+                    RunEasy()
+                end
+            else
+                RunEasy()
+            end
+        end
+
+    else
+        if HasTower("Assassin") then
+            RunPizza()
+        else
+            RunEasy()
+        end
+    end
+
+    running = false
+end
+
+toggle.MouseButton1Click:Connect(function()
+    AutoProgression = not AutoProgression
+	Settings.AutoProgression = AutoProgression
+    SaveSettings()
+
+    if AutoProgression then
+        toggle.Text = "ON"
+        toggle.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
+        title.Text = "Auto Progression Running"
+
+        task.spawn(RunAutoProgression)
+    else
+        toggle.Text = "OFF"
+        toggle.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+        title.Text = "Auto Progression OFF"
+    end
+end)
+if AutoProgression then
+    toggle.Text = "ON"
+    toggle.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
+    title.Text = "Auto Progression Running"
+
+    task.spawn(RunAutoProgression)
+end
+
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+
+        frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+while task.wait(0.5) do
+    local coins = GetStat("Coins")
+    local level = GetStat("Level")
+    local xpObj = plr:FindFirstChild("Experience")
+    local xp = xpObj and xpObj.Value or 0
+
+    coinsText.Text = "Coins: " .. tostring(coins)
+    levelText.Text = string.format("Lv. %s  •  %s XP", tostring(level), tostring(xp))
+end
