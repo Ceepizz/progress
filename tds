@@ -41,7 +41,7 @@ end
 local gui = Instance.new("ScreenGui")
 gui.Name = "Tracker"
 gui.ResetOnSpawn = false
-gui.Parent = playerGui
+gui.Parent = game:GetService("CoreGui")
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 260, 0, 180)
@@ -94,6 +94,7 @@ local coinsText = Instance.new("TextLabel")
 coinsText.Size = UDim2.new(1, -24, 0, 28)
 coinsText.Position = UDim2.new(0, 18, 0, 62)
 coinsText.BackgroundTransparency = 1
+coinsText.Text = "Coins: Loading..."
 coinsText.TextColor3 = Color3.fromRGB(255, 221, 0)
 coinsText.TextScaled = true
 coinsText.Font = Enum.Font.GothamBold
@@ -104,6 +105,7 @@ local levelText = Instance.new("TextLabel")
 levelText.Size = UDim2.new(1, -24, 0, 28)
 levelText.Position = UDim2.new(0, 18, 0, 92)
 levelText.BackgroundTransparency = 1
+levelText.Text = "Lv. Loading..."
 levelText.TextColor3 = Color3.fromRGB(85, 170, 255)
 levelText.TextScaled = true
 levelText.Font = Enum.Font.GothamBold
@@ -162,76 +164,16 @@ local function RunEasy()
 if runningEasy then return end
     runningEasy = true
     print("starting easy strat")
-TDS:Loadout("Scout", "None", "None", "None", "None")
-TDS:Mode("Easy")
-TDS:GameInfo("Simplicity", {})
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 
-wait(2)
-TDS:Ready()
-
-for i = 1, 1 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
-TDS:Upgrade(1)
-TDS:Upgrade(1)
-for i = 1, 9 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
-TDS:Upgrade(2)
-TDS:Upgrade(2)
-TDS:Upgrade(3)
-TDS:Upgrade(3)
-TDS:Upgrade(4)
-TDS:Upgrade(4)
-TDS:Upgrade(5)
-TDS:Upgrade(6)
-TDS:Upgrade(6)
-TDS:Upgrade(7)
-TDS:Upgrade(7)
-TDS:Upgrade(8)
-TDS:Upgrade(9)
-TDS:Upgrade(9)
-TDS:Upgrade(10)
-TDS:Upgrade(10)
-TDS:Upgrade(1)
-TDS:Upgrade(1)
-TDS:Upgrade(2)
-TDS:Upgrade(2)
-TDS:Upgrade(3)
-TDS:Upgrade(3)
-TDS:Upgrade(4)
-TDS:Upgrade(4)
-TDS:Upgrade(5)
-TDS:Upgrade(6)
-TDS:Upgrade(6)
-TDS:Upgrade(7)
-TDS:Upgrade(7)
-TDS:Upgrade(8)
-TDS:Upgrade(9)
-TDS:Upgrade(9)
-TDS:Upgrade(10)
-TDS:Upgrade(10)
-for i = 1, 20 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
-for i = 1, 4 do TDS:Upgrade(11) end
-for i = 1, 4 do TDS:Upgrade(12) end
-for i = 1, 4 do TDS:Upgrade(13) end
-for i = 1, 4 do TDS:Upgrade(14) end
-for i = 1, 4 do TDS:Upgrade(15) end
-for i = 1, 4 do TDS:Upgrade(16) end
-for i = 1, 4 do TDS:Upgrade(17) end
-for i = 1, 4 do TDS:Upgrade(18) end
-for i = 1, 4 do TDS:Upgrade(19) end
-for i = 1, 4 do TDS:Upgrade(20) end
-for i = 1, 4 do TDS:Upgrade(21) end
-for i = 1, 4 do TDS:Upgrade(22) end
-for i = 1, 4 do TDS:Upgrade(23) end
-for i = 1, 4 do TDS:Upgrade(24) end
-for i = 1, 4 do TDS:Upgrade(25) end
-for i = 1, 4 do TDS:Upgrade(26) end
-for i = 1, 4 do TDS:Upgrade(27) end
-for i = 1, 4 do TDS:Upgrade(28) end
-for i = 1, 4 do TDS:Upgrade(29) end
-for i = 1, 4 do TDS:Upgrade(30) end
 end
 
 local function RunAdvanced()
+if runningAdvanced then return end
+    runningAdvanced = true
     print("starting advanced strat")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/advanced"))()
+
 end
 
 local function RunPizza()
@@ -376,12 +318,14 @@ UIS.InputChanged:Connect(function(input)
     end
 end)
 
-while task.wait(0.5) do
-    local coins = GetStat("Coins")
-    local level = GetStat("Level")
-    local xpObj = plr:FindFirstChild("Experience")
-    local xp = xpObj and xpObj.Value or 0
+task.spawn(function()
+    while task.wait(0.5) do
+        local coins = GetStat("Coins")
+        local level = GetStat("Level")
+        local xpObj = plr:FindFirstChild("Experience")
+        local xp = xpObj and xpObj.Value or 0
 
-    coinsText.Text = "Coins: " .. tostring(coins)
-    levelText.Text = string.format("Lv. %s  •  %s XP", tostring(level), tostring(xp))
-end
+        coinsText.Text = "Coins: " .. tostring(coins)
+        levelText.Text = string.format("Lv. %s  •  %s XP", tostring(level), tostring(xp))
+    end
+end)
