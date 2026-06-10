@@ -10,6 +10,51 @@ local CoreGui = game:GetService("CoreGui")
 
 local SETTINGS_FILE = "AutoProgression.json"
 
+local plr = Players.LocalPlayer or Players.PlayerAdded:Wait()
+local rf = ReplicatedStorage:WaitForChild("RemoteFunction")
+
+
+local TeleportService = game:GetService("TeleportService")
+local LOBBY_PLACE_ID = 3260590327
+
+local function AntiStuck()
+    task.spawn(function()
+        local secondsStuck = 0
+
+        while true do
+            task.wait(1)
+
+            local attrLoading = plr:GetAttribute("Loading") == true
+            local attrTeleporting = plr:GetAttribute("Teleporting") == true
+
+            local pg = plr:FindFirstChild("PlayerGui")
+            local loadScreen = pg and pg:FindFirstChild("LoadingScreen")
+            local loadContent = loadScreen and loadScreen:FindFirstChild("content")
+            local isLoadVisible = loadContent and loadContent.Visible == true
+
+            local loading = attrLoading or attrTeleporting or isLoadVisible
+
+            if loading then
+                secondsStuck += 1
+
+                if secondsStuck >= 60 then
+                    print("Loading stuck for 60 seconds. Teleporting...")
+
+                    pcall(function()
+                        TeleportService:Teleport(LOBBY_PLACE_ID, plr)
+                    end)
+
+                    secondsStuck = 0
+                end
+            else
+                secondsStuck = 0
+            end
+        end
+    end)
+end
+
+AntiStuck()
+
 local Settings = {
     AutoProgression = false
 }
@@ -30,8 +75,30 @@ local function SaveSettings()
     end
 end
 
-local plr = Players.LocalPlayer
-local rf = ReplicatedStorage:WaitForChild("RemoteFunction")
+local function WaitUntilLoaded()
+    print("Waiting for loading screen...")
+
+    while true do
+        task.wait(1)
+
+        local attrLoading = plr:GetAttribute("Loading") == true
+        local attrTeleporting = plr:GetAttribute("Teleporting") == true
+
+        local pg = plr:FindFirstChild("PlayerGui")
+        local loadScreen = pg and pg:FindFirstChild("LoadingScreen")
+        local loadContent = loadScreen and loadScreen:FindFirstChild("content")
+        local isLoadVisible = loadContent and loadContent.Visible == true
+
+        local loading = attrLoading or attrTeleporting or isLoadVisible
+
+        if loading then
+            print("Loading...")
+        else
+            print("Loaded!")
+            break
+        end
+    end
+end
 
 local function GetStat(name)
     local obj = plr:FindFirstChild(name)
@@ -65,6 +132,9 @@ local function WaitForData()
 
     return level, coins
 end
+
+WaitUntilLoaded()
+task.wait(1)
 
 local loadedLevel, loadedCoins = WaitForData()
 
@@ -182,7 +252,7 @@ local function RunEasy()
     if runningEasy then return end
     runningEasy = true
 
-statusDisplay.Text = "Status: Grinding Easy"
+    statusDisplay.Text = "Status: Grinding Easy"
 
     print("starting easy strat")
 
@@ -205,6 +275,7 @@ end
 local function RunPizza()
     if runningPizza then return end
     runningPizza = true
+
     statusDisplay.Text = "Status: Grinding Pizza"
 
     print("starting pizza strat")
@@ -256,6 +327,9 @@ end
 local function RunAutoProgression()
     if running then return end
     running = true
+
+    WaitUntilLoaded()
+    task.wait(1)
 
     local level, coins = WaitForData()
 
