@@ -4,6 +4,8 @@
     local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
     local activeStratThread = nil
+    TDS:Loadout("Assassin", "None", "None", "None", "None")
+    TDS:Mode("PizzaParty")
     local function StartStrategy()
         TDS:ResetIndex()
         TDS:Ready()
