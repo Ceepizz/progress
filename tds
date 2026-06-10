@@ -21,15 +21,11 @@ end
 
 local function SaveSettings()
     if writefile then
-        writefile(
-            SETTINGS_FILE,
-            HttpService:JSONEncode(Settings)
-        )
+        writefile(SETTINGS_FILE, HttpService:JSONEncode(Settings))
     end
 end
 
 local plr = Players.LocalPlayer
-local playerGui = plr:WaitForChild("PlayerGui")
 local rf = ReplicatedStorage:WaitForChild("RemoteFunction")
 local cache = require(ReplicatedStorage.Client.Modules.Cache)("Inventory.Troops")
 
@@ -75,12 +71,10 @@ gradient.Parent = header
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 1, 0)
-title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "Auto Progression OFF"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextScaled = true
-title.TextWrapped = false
 title.Font = Enum.Font.GothamBold
 title.TextXAlignment = Enum.TextXAlignment.Center
 title.Parent = header
@@ -126,28 +120,32 @@ Instance.new("UICorner", toggle).CornerRadius = UDim.new(0, 10)
 
 local AutoProgression = Settings.AutoProgression
 local running = false
+local runningEasy = false
+local runningPizza = false
+local runningHardcore = false
 
 local function GetStat(name)
     local obj = plr:FindFirstChild(name)
 
     if obj and obj.Value ~= nil then
-        return obj.Value
+        return tonumber(obj.Value) or 0
     end
 
     local attr = plr:GetAttribute(name)
     if attr ~= nil then
-        return attr
+        return tonumber(attr) or 0
     end
 
     local leaderstats = plr:FindFirstChild("leaderstats")
     local stat = leaderstats and leaderstats:FindFirstChild(name)
 
     if stat and stat.Value ~= nil then
-        return stat.Value
+        return tonumber(stat.Value) or 0
     end
 
     return 0
 end
+
 local function HasTower(towerName)
     local data = cache:GetValue()
     return data and data[towerName] ~= nil
@@ -155,45 +153,40 @@ end
 
 local function BuyTower(towerName)
     print("buying " .. towerName)
-    rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
+    return rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
 end
-	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
 
+local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
 
 local function RunEasy()
-if runningEasy then return end
+    if runningEasy then return end
     runningEasy = true
+
     print("starting easy strat")
+
     TDS:Loadout("Scout", "None", "None", "None", "None")
     TDS:Mode("Easy")
     TDS:GameInfo("Simplicity", {})
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 
-end
-
-local function RunAdvanced()
-if runningAdvanced then return end
-    runningAdvanced = true
-    print("starting advanced strat")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/advanced"))()
-
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 end
 
 local function RunPizza()
-if runningPizza then return end
+    if runningPizza then return end
     runningPizza = true
+
     print("starting pizza strat")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
 local function RunHardcore()
-if runningPizza then return end
-    runningPizza = true
-    print("starting pizza strat")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
-
+    if runningHardcore then return end
+    runningHardcore = true
 
     print("starting hardcore mode")
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
 local function RunAutoProgression()
@@ -235,8 +228,11 @@ local function RunAutoProgression()
         end
 
     elseif level <= 24 then
+        RunEasy()
+
+    else
         if HasTower("Assassin") then
-            RunAdvanced()
+            RunPizza()
         else
             if coins >= 800 then
                 BuyTower("Assassin")
@@ -244,20 +240,13 @@ local function RunAutoProgression()
 
                 if HasTower("Assassin") then
                     print("Assassin bought")
-                    RunAdvanced()
+                    RunPizza()
                 else
                     RunEasy()
                 end
             else
                 RunEasy()
             end
-        end
-
-    else
-        if HasTower("Assassin") then
-            RunPizza()
-        else
-            RunEasy()
         end
     end
 
@@ -266,7 +255,7 @@ end
 
 toggle.MouseButton1Click:Connect(function()
     AutoProgression = not AutoProgression
-	Settings.AutoProgression = AutoProgression
+    Settings.AutoProgression = AutoProgression
     SaveSettings()
 
     if AutoProgression then
@@ -281,6 +270,7 @@ toggle.MouseButton1Click:Connect(function()
         title.Text = "Auto Progression OFF"
     end
 end)
+
 if AutoProgression then
     toggle.Text = "ON"
     toggle.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
@@ -315,7 +305,6 @@ frame.InputChanged:Connect(function(input)
         dragInput = input
     end
 end)
-
 
 UIS.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
