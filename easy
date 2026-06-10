@@ -81,3 +81,7 @@ for i = 1, 4 do TDS:Upgrade(27) end
 for i = 1, 4 do TDS:Upgrade(28) end
 for i = 1, 4 do TDS:Upgrade(29) end
 for i = 1, 4 do TDS:Upgrade(30) end
+TDS:WaitForWave(39)
+for i = 1, 30 do
+    TDS:Sell(i)
+end
