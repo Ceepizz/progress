@@ -56,15 +56,12 @@ local function GetStat(name)
 end
 
 local function WaitForData()
-    local level = 0
-    local coins = 0
+    task.wait(3)
 
-    repeat
-        task.wait(1)
-        level = GetStat("Level")
-        coins = GetStat("Coins")
-        print("Waiting data:", level, coins)
-    until level > 0
+    local level = GetStat("Level")
+    local coins = GetStat("Coins")
+
+    print("Data loaded:", level, coins)
 
     return level, coins
 end
@@ -205,7 +202,7 @@ statusDisplay.Text = "Status: Grinding Easy"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 end
 
-local function RunPizza()
+local function RunHardcore()
     if runningPizza then return end
     runningPizza = true
     statusDisplay.Text = "Status: Grinding Pizza"
@@ -225,7 +222,7 @@ local function RunPizza()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
-local function RunHardcore()
+local function RunPizza()
     if runningHardcore then return end
     runningHardcore = true
 
