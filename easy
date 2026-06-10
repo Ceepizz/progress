@@ -4,7 +4,12 @@
     local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
     local activeStratThread = nil
+    local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
+    TDS:Loadout("Scout", "None", "None", "None", "None")
+    TDS:Mode("Easy")
+    TDS:GameInfo("Simplicity", {})
     local function StartStrategy()
+
         TDS:ResetIndex()
         TDS:Ready()
         TDS:VoteSkip(1,20)
@@ -72,18 +77,6 @@ wait(3)
 for i = 1, 30 do
     TDS:Sell(i)
 end
-      
-end
-        for i = 1, 25 do
-    TDS:Place("Assassin",  4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
-end
-
-for towerIndex = 16, 40 do
-    for i = 1, 2 do
-        TDS:Upgrade(towerIndex)
-    end
-end
-
     end
 
     local function GetMatchStatus()
