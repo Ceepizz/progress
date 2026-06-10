@@ -137,6 +137,17 @@ levelDisplay.Font = Enum.Font.GothamBold
 levelDisplay.TextXAlignment = Enum.TextXAlignment.Center
 levelDisplay.Parent = frame
 
+local statusDisplay = Instance.new("TextLabel")
+statusDisplay.Size = UDim2.new(1, 0, 0, 25)
+statusDisplay.Position = UDim2.new(0, 0, 0, 105)
+statusDisplay.BackgroundTransparency = 1
+statusDisplay.Text = "Status: Waiting..."
+statusDisplay.TextColor3 = Color3.fromRGB(200, 200, 200)
+statusDisplay.TextScaled = true
+statusDisplay.Font = Enum.Font.GothamBold
+statusDisplay.TextXAlignment = Enum.TextXAlignment.Center
+statusDisplay.Parent = frame
+
 local toggle = Instance.new("TextButton")
 toggle.Size = UDim2.new(0, 90, 0, 30)
 toggle.Position = UDim2.new(0.5, -45, 1, -40)
@@ -174,6 +185,8 @@ local function RunEasy()
     if runningEasy then return end
     runningEasy = true
 
+statusDisplay.Text = "Status: Grinding Easy"
+
     print("starting easy strat")
 
     getgenv().AutoPremium = true
@@ -195,6 +208,7 @@ end
 local function RunPizza()
     if runningPizza then return end
     runningPizza = true
+    statusDisplay.Text = "Status: Grinding Pizza"
 
     print("starting pizza strat")
 
@@ -214,6 +228,8 @@ end
 local function RunHardcore()
     if runningHardcore then return end
     runningHardcore = true
+
+    statusDisplay.Text = "Status: Grinding Hardcore"
 
     print("starting hardcore mode")
 
