@@ -202,7 +202,7 @@ statusDisplay.Text = "Status: Grinding Easy"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 end
 
-local function RunHardcore()
+local function RunPizza()
     if runningPizza then return end
     runningPizza = true
     statusDisplay.Text = "Status: Grinding Pizza"
@@ -222,7 +222,7 @@ local function RunHardcore()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
-local function RunPizza()
+local function RunHardcore()
     if runningHardcore then return end
     runningHardcore = true
 
