@@ -7,7 +7,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
 
 local LOBBY_PLACE_ID = 3260590327
-local TELEPORT_AFTER_SECONDS = 7200 -- 2 hours
+local TELEPORT_AFTER_SECONDS = 7200
 
 local activeStratThread = nil
 local stratRunning = false
@@ -29,71 +29,18 @@ local function TeleportLobby()
     end
 end
 
-task.spawn(function()
-    task.wait(TELEPORT_AFTER_SECONDS)
-
-    print("2 hours reached. Force teleporting to TDS lobby...")
-
-    if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
-        task.cancel(activeStratThread)
-        activeStratThread = nil
-    end
-
-    stratRunning = false
-    TeleportLobby()
-end)
-
-local function StartStrategy()
-    if stratRunning then return end
-    stratRunning = true
-
-    print("Starting strategy...")
-
-    TDS:ResetIndex()
-    TDS:Ready()
-
-    for i = 1, 15 do
-        TDS:Place("Assassin", 4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
-    end
-
-    for towerIndex = 1, 4 do
-        for i = 1, 4 do
-            TDS:Upgrade(towerIndex)
-        end
-    end
-
-    for towerIndex = 5, 15 do
-        for i = 1, 2 do
-            TDS:Upgrade(towerIndex)
-        end
-    end
-
-    for i = 1, 25 do
-        TDS:Place("Assassin", 4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
-    end
-
-    for towerIndex = 16, 40 do
-        for i = 1, 2 do
-            TDS:Upgrade(towerIndex)
-        end
-    end
-
-    stratRunning = false
-    print("Strategy finished.")
-end
-
 local function RewardScreenDetected()
     local success, detected = pcall(function()
         local uiRoot = PlayerGui:FindFirstChild("ReactGameNewRewards")
-        if not uiRoot then return false end
+        if not uiRoot then
+            return false
+        end
 
-        local rewardsScreen = uiRoot:FindFirstChild("RewardsScreen", true)
-        if rewardsScreen then
+        if uiRoot:FindFirstChild("RewardsScreen", true) then
             return true
         end
 
-        local gameOver = uiRoot:FindFirstChild("gameOver", true)
-        if gameOver then
+        if uiRoot:FindFirstChild("gameOver", true) then
             return true
         end
 
@@ -104,9 +51,9 @@ local function RewardScreenDetected()
 end
 
 local function FireVotingSkip()
-    print("Firing Voting Skip 3 times...")
+    print("Firing Voting Skip...")
 
-    for i = 1, 3 do
+    for i = 1, 5 do
         local success, err = pcall(function()
             RemoteFunction:InvokeServer("Voting", "Skip")
         end)
@@ -121,6 +68,78 @@ local function FireVotingSkip()
     end
 end
 
+local function StartStrategy()
+    if stratRunning then
+        print("Strategy already running")
+        return
+    end
+
+    stratRunning = true
+    print("Starting strategy...")
+
+    local ok, err = pcall(function()
+        TDS:ResetIndex()
+
+        task.spawn(function()
+            pcall(function()
+                TDS:Ready()
+            end)
+        end)
+
+        task.wait(3)
+
+        print("Starting placement...")
+
+        for i = 1, 15 do
+            TDS:Place("Assassin", 4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
+        end
+
+        for towerIndex = 1, 4 do
+            for i = 1, 4 do
+                TDS:Upgrade(towerIndex)
+            end
+        end
+
+        for towerIndex = 5, 15 do
+            for i = 1, 2 do
+                TDS:Upgrade(towerIndex)
+            end
+        end
+
+        for i = 1, 25 do
+            TDS:Place("Assassin", 4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
+        end
+
+        for towerIndex = 16, 40 do
+            for i = 1, 2 do
+                TDS:Upgrade(towerIndex)
+            end
+        end
+
+        print("Strategy finished.")
+    end)
+
+    if not ok then
+        warn("Strategy error:", err)
+    end
+
+    stratRunning = false
+end
+
+task.spawn(function()
+    task.wait(TELEPORT_AFTER_SECONDS)
+
+    print("2 hours reached. Force teleporting to TDS lobby...")
+
+    if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
+        task.cancel(activeStratThread)
+        activeStratThread = nil
+    end
+
+    stratRunning = false
+    TeleportLobby()
+end)
+
 task.spawn(function()
     activeStratThread = task.spawn(StartStrategy)
 
@@ -132,7 +151,7 @@ task.spawn(function()
         if RewardScreenDetected() and not handledRewardScreen then
             handledRewardScreen = true
 
-            print("Reward screen detected! Stopping old thread...")
+            print("Reward screen detected!")
 
             if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
                 task.cancel(activeStratThread)
@@ -143,7 +162,7 @@ task.spawn(function()
 
             FireVotingSkip()
 
-            print("Waiting for reward screen to clear...")
+            print("Waiting for reward screen to disappear...")
 
             repeat
                 task.wait(1)
@@ -153,9 +172,9 @@ task.spawn(function()
                 break
             end
 
-            task.wait(1.5)
+            task.wait(2)
 
-            print("Starting new strategy match!")
+            print("Restarting strategy...")
             handledRewardScreen = false
             activeStratThread = task.spawn(StartStrategy)
         end
