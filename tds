@@ -33,7 +33,7 @@ local playerGui = plr:WaitForChild("PlayerGui")
 local rf = ReplicatedStorage:WaitForChild("RemoteFunction")
 local cache = require(ReplicatedStorage.Client.Modules.Cache)("Inventory.Troops")
 
-local oldGui = playerGui:FindFirstChild("Tracker")
+local oldGui = game:GetService("CoreGui"):FindFirstChild("Tracker")
 if oldGui then
     oldGui:Destroy()
 end
@@ -184,6 +184,12 @@ if runningPizza then return end
 end
 
 local function RunHardcore()
+if runningPizza then return end
+    runningPizza = true
+    print("starting pizza strat")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
+
+
     print("starting hardcore mode")
 end
 
