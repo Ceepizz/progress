@@ -141,6 +141,17 @@ local function FireVotingSkip()
 end
 
 task.spawn(function()
+    print("Waiting for clean match screen...")
+
+    repeat
+        task.wait(1)
+    until not MatchEndedDetected() or teleported
+
+    if teleported then
+        return
+    end
+
+    print("Clean screen detected. Starting first strategy...")
     activeStratThread = task.spawn(StartStrategy)
 
     local handledMatchEnd = false
@@ -162,7 +173,7 @@ task.spawn(function()
 
             FireVotingSkip()
 
-            print("Waiting for reward screen to clear...")
+            print("Waiting for reward screen to disappear...")
 
             repeat
                 task.wait(1)
@@ -172,9 +183,10 @@ task.spawn(function()
                 break
             end
 
-            task.wait(1.5)
+            task.wait(3)
 
             print("Starting new strategy match!")
+
             handledMatchEnd = false
             activeStratThread = task.spawn(StartStrategy)
         end
