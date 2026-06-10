@@ -157,7 +157,7 @@ local function BuyTower(towerName)
     print("buying " .. towerName)
     rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
 end
-	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Library.lua"))()
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
 
 
 local function RunEasy()
