@@ -189,14 +189,23 @@ local function RunHardcore()
     if runningHardcore then return end
     runningHardcore = true
     print("starting hardcore mode")
+
 	getgenv().AutoPremium = true
 	getgenv().AutoSkip = true
     getgenv().AutoRejoin = false
 	getgenv().TimeScaleEnabled = true
     getgenv().TimeScaleValue = 2
 	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
-	
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
+	 if game.PlaceId == 3260590327 then
+        RemoteFunction:InvokeServer("Multiplayer", "v2:start", {
+            difficulty = "Easy",
+            mode = "hardcore",
+            count = 1
+        })
+    end
+     TDS:GameInfo("Wretched Front", {})
+     TDS:Loadout("Assassin", "None", "None", "None", "None")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/hardcore"))()
 end
 
 local function RunAutoProgression()
