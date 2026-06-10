@@ -155,19 +155,19 @@ local function BuyTower(towerName)
     print("buying " .. towerName)
     return rf:InvokeServer("Shop", "Purchase", "Tower", towerName)
 end
-
-local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
-
 local function RunEasy()
     if runningEasy then return end
     runningEasy = true
-
     print("starting easy strat")
-
-    TDS:Loadout("Scout", "None", "None", "None", "None")
+	getgenv().AutoPremium = true
+	getgenv().AutoSkip = true
+    getgenv().AutoRejoin = false
+	getgenv().TimeScaleEnabled = false
+    getgenv().TimeScaleValue = 2
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
+	TDS:Loadout("Scout", "None", "None", "None", "None")
     TDS:Mode("Easy")
     TDS:GameInfo("Simplicity", {})
-
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 end
 
@@ -176,16 +176,26 @@ local function RunPizza()
     runningPizza = true
 
     print("starting pizza strat")
-
+	getgenv().AutoPremium = true
+	getgenv().AutoSkip = true
+    getgenv().AutoRejoin = false
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
+	TDS:Loadout("Assassin", "None", "None", "None", "None")
+    TDS:Mode("PizzaParty")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
 local function RunHardcore()
     if runningHardcore then return end
     runningHardcore = true
-
     print("starting hardcore mode")
-
+	getgenv().AutoPremium = true
+	getgenv().AutoSkip = true
+    getgenv().AutoRejoin = false
+	getgenv().TimeScaleEnabled = true
+    getgenv().TimeScaleValue = 2
+	local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
+	
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
