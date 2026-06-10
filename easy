@@ -62,5 +62,6 @@ for i = 1, 4 do TDS:Upgrade(29) end
 for i = 1, 4 do TDS:Upgrade(30) end
 TDS:WaitForWave(19)
 wait(3)
-TDS:SellAll()
-TDS:RestartGame()
+for i = 1, 30 do
+    TDS:Sell(i)
+end
