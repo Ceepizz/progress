@@ -4,10 +4,6 @@
     local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
     local activeStratThread = nil
-    local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
-    TDS:Loadout("Scout", "None", "None", "None", "None")
-    TDS:Mode("Easy")
-    TDS:GameInfo("Simplicity", {})
     local function StartStrategy()
 
         TDS:ResetIndex()
