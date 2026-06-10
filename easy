@@ -52,7 +52,7 @@ for i = 1, 4 do TDS:Upgrade(11) end
 for i = 1, 4 do TDS:Upgrade(12) end
 for i = 1, 4 do TDS:Upgrade(13) end
 TDS:WaitForWave(19)
-wait(3)
+wait(4)
 for i = 1, 30 do
     TDS:Sell(i)
 end
