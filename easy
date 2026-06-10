@@ -1,25 +1,4 @@
-local TeleportService = game:GetService("TeleportService")
-local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-task.spawn(function()
-    local UiRoot
-
-    repeat
-        task.wait(1)
-
-        local root = PlayerGui:FindFirstChild("ReactGameNewRewards")
-        local frame = root and root:FindFirstChild("Frame")
-        local gameOver = frame and frame:FindFirstChild("gameOver")
-        local RewardsScreen = gameOver and gameOver:FindFirstChild("RewardsScreen")
-        UiRoot = RewardsScreen and RewardsScreen:FindFirstChild("RewardsSection")
-    until UiRoot
-
-    print("Rewards detected")
-    TeleportService:Teleport(3260590327)
-end)
-TDS:Loadout("Scout", "None", "None", "None", "None")
-TDS:Mode("Easy")
-TDS:GameInfo("Simplicity", {})
 TDS:Ready()
 TDS:VoteSkip(1,19)
 for i = 1, 1 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
@@ -83,6 +62,5 @@ for i = 1, 4 do TDS:Upgrade(29) end
 for i = 1, 4 do TDS:Upgrade(30) end
 TDS:WaitForWave(19)
 wait(3)
-for i = 1, 30 do
-    TDS:Sell(i)
-end
+TDS:SellAll()
+
