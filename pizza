@@ -9,7 +9,12 @@
         TDS:Ready()
         TDS:VoteSkip(1,20)
         for i = 1,15 do TDS:Place("Assassin",  4.272305488586426, 1.0368714332580566, -31.2442684173584, true) end
-        for towerIndex = 1, 15 do
+        for towerIndex = 1, 4 do
+    for i = 1, 4 do
+        TDS:Upgrade(towerIndex)
+    end
+end
+     for towerIndex = 5, 15 do
     for i = 1, 2 do
         TDS:Upgrade(towerIndex)
     end
