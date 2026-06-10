@@ -51,7 +51,6 @@ for i = 1, 20 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.
 for i = 1, 4 do TDS:Upgrade(11) end
 for i = 1, 4 do TDS:Upgrade(12) end
 for i = 1, 4 do TDS:Upgrade(13) end
-for i = 1, 4 do TDS:Upgrade(14) end
 TDS:WaitForWave(19)
 wait(3)
 for i = 1, 30 do
