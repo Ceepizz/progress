@@ -1,0 +1,109 @@
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local LocalPlayer = Players.LocalPlayer
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
+    local activeStratThread = nil
+    local function StartStrategy()
+        TDS:ResetIndex()
+        TDS:Ready()
+        TDS:VoteSkip(1,20)
+        for i = 1,15 do TDS:Place("Assassin", 4.145374298095703, 0.9999395608901978, -37.40777587890625, true) end
+        for towerIndex = 1, 15 do
+    for i = 1, 2 do
+        TDS:Upgrade(towerIndex)
+    end
+end
+        for i = 1, 25 do
+    TDS:Place("Assassin", 4.145374298095703, 0.9999395608901978, -37.40777587890625, true)
+end
+
+for towerIndex = 16, 40 do
+    for i = 1, 2 do
+        TDS:Upgrade(towerIndex)
+    end
+end
+
+    end
+
+    local function GetMatchStatus()
+        local success, status = pcall(function()
+            local uiRoot = PlayerGui:FindFirstChild("ReactGameNewRewards")
+            if not uiRoot then return nil end
+
+            local mainFrame = uiRoot:FindFirstChild("Frame")
+            if not mainFrame or not mainFrame.Visible then return nil end
+
+            local gameOver = mainFrame:FindFirstChild("gameOver")
+            if not gameOver or not gameOver.Visible then return nil end
+
+            local rewardsScreen = gameOver:FindFirstChild("RewardsScreen")
+            if not rewardsScreen or not rewardsScreen.Visible then return nil end
+
+            local topBanner = rewardsScreen:FindFirstChild("RewardBanner")
+            if not topBanner then return nil end
+
+            local label = topBanner:FindFirstChild("textLabel")
+                or topBanner:FindFirstChildOfClass("TextLabel")
+
+            if not label then return nil end
+
+            local txt = label.Text:upper()
+            if txt == "" then return nil end
+
+            if txt:find("LOST") or txt:find("DEFEAT") then
+                return "LOSS"
+            end
+
+            return nil
+        end)
+
+        if success then
+            return status
+        end
+
+        return nil
+    end
+
+    local function FireVotingSkip()
+        print("Firing Voting Skip 3 times...")
+
+        for i = 1, 3 do
+            RemoteFunction:InvokeServer("Voting", "Skip")
+
+            if i < 3 then
+                task.wait(0.5)
+            end
+        end
+    end
+
+    task.spawn(function()
+        activeStratThread = task.spawn(StartStrategy)
+
+        while true do
+            task.wait(0.5)
+
+            local currentStatus = GetMatchStatus()
+
+            if currentStatus == "LOSS" then
+                print("Loss detected! Stopping old thread...")
+
+                if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
+                    task.cancel(activeStratThread)
+                    activeStratThread = nil
+                end
+
+                FireVotingSkip()
+
+                print("Waiting for match screen to clear...")
+                repeat
+                    task.wait(1)
+                until GetMatchStatus() == nil
+
+                task.wait(1.5)
+
+                print("Starting new strategy match!")
+                activeStratThread = task.spawn(StartStrategy)
+            end
+        end
+    end)
