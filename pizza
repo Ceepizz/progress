@@ -36,7 +36,7 @@ task.spawn(function()
 
     CheckTeleportAfterStrat()
 end)
-	TDS:Loadout("Assassin", "None", "None", "None", "None")
+
 local function StartStrategy()
     if stratRunning then return end
     stratRunning = true
