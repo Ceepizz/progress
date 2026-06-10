@@ -177,7 +177,10 @@ if runningAdvanced then return end
 end
 
 local function RunPizza()
+if runningPizza then return end
+    runningPizza = true
     print("starting pizza strat")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/pizza"))()
 end
 
 local function RunHardcore()
