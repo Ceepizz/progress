@@ -164,6 +164,9 @@ local function RunEasy()
 if runningEasy then return end
     runningEasy = true
     print("starting easy strat")
+    TDS:Loadout("Scout", "None", "None", "None", "None")
+    TDS:Mode("Easy")
+    TDS:GameInfo("Simplicity", {})
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/easy"))()
 
 end
