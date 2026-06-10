@@ -11,7 +11,6 @@ local TELEPORT_AFTER_SECONDS = 7200 -- 2 hours
 
 local activeStratThread = nil
 local stratRunning = false
-local shouldTeleportAfterStrat = false
 local teleported = false
 
 local function TeleportLobby()
@@ -19,27 +18,36 @@ local function TeleportLobby()
     teleported = true
 
     print("Teleporting to TDS lobby...")
-    TeleportService:Teleport(LOBBY_PLACE_ID, LocalPlayer)
-end
 
-local function CheckTeleportAfterStrat()
-    if shouldTeleportAfterStrat and not stratRunning then
-        TeleportLobby()
+    local success, err = pcall(function()
+        TeleportService:Teleport(LOBBY_PLACE_ID, LocalPlayer)
+    end)
+
+    if not success then
+        warn("Teleport failed:", err)
+        teleported = false
     end
 end
 
 task.spawn(function()
     task.wait(TELEPORT_AFTER_SECONDS)
 
-    print("2 hours finished. Waiting for current strategy to finish...")
-    shouldTeleportAfterStrat = true
+    print("2 hours reached. Force teleporting to TDS lobby...")
 
-    CheckTeleportAfterStrat()
+    if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
+        task.cancel(activeStratThread)
+        activeStratThread = nil
+    end
+
+    stratRunning = false
+    TeleportLobby()
 end)
 
 local function StartStrategy()
     if stratRunning then return end
     stratRunning = true
+
+    print("Starting strategy...")
 
     TDS:ResetIndex()
     TDS:Ready()
@@ -73,8 +81,6 @@ local function StartStrategy()
 
     stratRunning = false
     print("Strategy finished.")
-
-    CheckTeleportAfterStrat()
 end
 
 local function GetMatchStatus()
@@ -148,20 +154,17 @@ task.spawn(function()
 
             stratRunning = false
 
-            if shouldTeleportAfterStrat then
-                print("2 hours already finished, teleporting after loss.")
-                TeleportLobby()
-                break
-            end
-
             FireVotingSkip()
 
             print("Waiting for match screen to clear...")
+
             repeat
                 task.wait(1)
             until GetMatchStatus() == nil or teleported
 
-            if teleported then break end
+            if teleported then
+                break
+            end
 
             task.wait(1.5)
 
