@@ -7,28 +7,21 @@
     local function StartStrategy()
         TDS:ResetIndex()
         TDS:Ready()
-        TDS:VoteSkip(1,20)
-        for i = 1,15 do TDS:Place("Assassin",  4.272305488586426, 1.0368714332580566, -31.2442684173584, true) end
-        for towerIndex = 1, 4 do
-    for i = 1, 4 do
-        TDS:Upgrade(towerIndex)
-    end
-end
-     for towerIndex = 5, 15 do
-    for i = 1, 2 do
-        TDS:Upgrade(towerIndex)
-    end
-end
-        for i = 1, 25 do
-    TDS:Place("Assassin",  4.272305488586426, 1.0368714332580566, -31.2442684173584, true)
-end
 
-for towerIndex = 16, 40 do
-    for i = 1, 2 do
-        TDS:Upgrade(towerIndex)
-    end
-end
+        TDS:Place("Pyromancer", -5.936307430267334, 0.9551397562026978, -31.831748962402344)
+        TDS:SetTarget(1, "Farthest")
 
+        for i = 1, 4 do
+            TDS:Upgrade(1)
+        end
+
+        for i = 1, 10 do
+            TDS:Place("Hunter", 2.679039716720581, 1.341203212738037, 21.30302619934082, true)
+        end
+
+        TDS:Upgrade(2)
+        TDS:Upgrade(3)
+        TDS:Upgrade(4)
     end
 
     local function GetMatchStatus()
