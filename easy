@@ -1,4 +1,4 @@
-
+TDS:ResetIndex()
 TDS:Ready()
 TDS:VoteSkip(1,19)
 for i = 1, 1 do TDS:Place("Scout", -11.131479263305664, 0.9999938011169434, -9.647957801818848, true) end 
