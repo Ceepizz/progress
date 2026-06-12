@@ -54,10 +54,7 @@ local function StartStrategy()
     for i = 1, 10 do
         TDS:Place("Hunter", 2.679039716720581, 1.341203212738037, 21.30302619934082, true)
     end
-
-    TDS:Upgrade(2)
-    TDS:Upgrade(3)
-    TDS:Upgrade(4)
+        TDS:Place("Minigunner", 2.679039716720581, 1.341203212738037, 21.30302619934082, true)
 
     stratRunning = false
     print("Strategy finished.")
