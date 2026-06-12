@@ -7,7 +7,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
 
 local LOBBY_PLACE_ID = 3260590327
-local MAX_LOSSES = 20
+local MAX_LOSSES = 10
 
 local activeStratThread = nil
 local stratRunning = false
