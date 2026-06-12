@@ -319,7 +319,7 @@ local function RunHardcore()
     end
 
     TDS:GameInfo("Wretched Front", {})
-    TDS:Loadout("Pyromancer", "Hunter", "None", "None", "None")
+    TDS:Loadout("Pyromancer", "Hunter", "Minigunner", "None", "None")
 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/progress/refs/heads/main/hardcore"))()
 end
