@@ -1,15 +1,39 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TeleportService = game:GetService("TeleportService")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RemoteFunction = ReplicatedStorage:WaitForChild("RemoteFunction")
 
+local LOBBY_PLACE_ID = 3260590327
+local MAX_LOSSES = 30
+
 local activeStratThread = nil
 local stratRunning = false
+local teleported = false
+local lossCount = 0
+
+local function TeleportLobby()
+    if teleported then
+        return
+    end
+
+    teleported = true
+    print("30 losses reached. Rejoining lobby...")
+
+    local success, err = pcall(function()
+        TeleportService:Teleport(LOBBY_PLACE_ID, LocalPlayer)
+    end)
+
+    if not success then
+        warn("Teleport failed:", err)
+        teleported = false
+    end
+end
 
 local function StartStrategy()
-    if stratRunning then
+    if stratRunning or teleported then
         return
     end
 
@@ -62,11 +86,13 @@ local function GetMatchStatus()
         end
 
         local topBanner = rewardsScreen:FindFirstChild("RewardBanner")
-        if not topBanner or not topBanner:FindFirstChild("textLabel") then
+        local textLabel = topBanner and topBanner:FindFirstChild("textLabel")
+
+        if not textLabel then
             return nil
         end
 
-        local txt = topBanner.textLabel.Text:upper()
+        local txt = textLabel.Text:upper()
         print("Banner text:", txt)
 
         if txt:find("LOST") then
@@ -86,7 +112,7 @@ end
 local function FireVotingSkipUntilGone()
     print("Firing Voting Skip until reward screen disappears...")
 
-    while GetMatchStatus() ~= nil do
+    while GetMatchStatus() ~= nil and not teleported do
         local success, err = pcall(function()
             RemoteFunction:InvokeServer("Voting", "Skip")
         end)
@@ -106,12 +132,15 @@ end
 task.spawn(function()
     activeStratThread = task.spawn(StartStrategy)
 
-    while true do
+    while not teleported do
         task.wait(0.5)
 
         local currentStatus = GetMatchStatus()
 
         if currentStatus == "LOSS" then
+            lossCount += 1
+            print("Loss Count:", lossCount .. "/" .. MAX_LOSSES)
+
             print("Loss detected! Stopping old thread...")
 
             if activeStratThread and coroutine.status(activeStratThread) ~= "dead" then
@@ -120,6 +149,11 @@ task.spawn(function()
             end
 
             stratRunning = false
+
+            if lossCount >= MAX_LOSSES then
+                TeleportLobby()
+                break
+            end
 
             FireVotingSkipUntilGone()
 
