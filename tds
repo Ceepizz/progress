@@ -240,7 +240,7 @@ end
 
 local function RemoveAether()
     task.spawn(function()
-        task.wait()
+        task.wait(0.2)
         local aether = CoreGui:FindFirstChild("Aether")
         if aether then
             aether:Destroy()
@@ -263,7 +263,9 @@ local function RunEasy()
     getgenv().TimeScaleValue = 2
 
     local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
-   
+
+    RemoveAether()
+
 
     TDS:Loadout("Scout", "None", "None", "None", "None")
     TDS:Mode("Easy")
@@ -285,6 +287,7 @@ local function RunPizza()
     getgenv().AutoRejoin = false
 
     local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
+    
     RemoveAether()
 
     TDS:Loadout("Assassin", "None", "None", "None", "None")
