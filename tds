@@ -263,7 +263,7 @@ local function RunEasy()
     getgenv().TimeScaleValue = 2
 
     local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ceepizz/guitheme/refs/heads/main/Aetherv2"))()
-    RemoveAether()
+   
 
     TDS:Loadout("Scout", "None", "None", "None", "None")
     TDS:Mode("Easy")
